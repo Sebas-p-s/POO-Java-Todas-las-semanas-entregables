@@ -1,6 +1,4 @@
-package co.edu.sena.Semanas.Semana07.modelo;
-
-import co.edu.sena.Semanas.Semana07.modelo.Empleado;
+package co.edu.sena.Semanas.Semana08.modelo;
 
 public class AgenteVentas extends Empleado {
 

@@ -1,8 +1,7 @@
-package co.edu.sena.Semanas.Semana07;
+package co.edu.sena.Semanas.Semana07.util;
 
 import co.edu.sena.Semanas.Semana07.modelo.*;
 import co.edu.sena.Semanas.Semana07.servicio.*;
-import co.edu.sena.Semanas.Semana07.util.Validaciones;
 import co.edu.sena.Semanas.Semana07.excepciones.*;
 
 public class Main {
