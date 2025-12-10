@@ -1,5 +1,7 @@
 ## 🏗️ Arquitectura del Proyecto
 
+> ¡Si no es bien visible recomiendo descargarlo y verlo en un editor de texto!
+
 Diagrama de Clases
 ===========================================================
                 DIAGRAMA UML - SISTEMA INMOBILIARIO
@@ -116,4 +118,3 @@ co.edu.sena.Semanas.Semana09
 └── Main
 
 
-> Si no es bien visible recomiendo descargarlo y verlo en un editor de texto
