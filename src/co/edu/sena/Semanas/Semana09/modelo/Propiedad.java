@@ -12,5 +12,9 @@ public abstract class Propiedad {
     public String getDireccion() { return direccion; }
     public double getPrecio() { return precio; }
 
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
     public abstract void mostrarInformacion();
 }

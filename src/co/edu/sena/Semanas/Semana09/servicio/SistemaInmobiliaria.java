@@ -7,139 +7,105 @@ import java.util.*;
 
 public class SistemaInmobiliaria {
 
-    private List<Empleado> empleados = new ArrayList<>();
-    private List<Propiedad> propiedades = new ArrayList<>();
+    private HashMap<String, Propiedad> mapaPropiedades = new HashMap<>();
+    private ArrayList<Empleado> empleados = new ArrayList<>();
 
-    private Map<String, Empleado> empleadosPorNombre = new HashMap<>();
-    private Map<String, Propiedad> propiedadesPorDireccion = new HashMap<>();
-
-    // Agregar empleado
-    public void agregarEmpleado(Empleado empleado) throws EmpleadoDuplicadoException {
-        String key = empleado.getNombre().toLowerCase();
-        if (empleadosPorNombre.containsKey(key)) {
-            throw new EmpleadoDuplicadoException("Ya existe un empleado llamado " + empleado.getNombre());
-        }
-        empleados.add(empleado);
-        empleadosPorNombre.put(key, empleado);
+    // Sobrecarga 1
+    public void agregarPropiedad(String direccion) {
+        mapaPropiedades.put(direccion, null);
     }
 
-    // Buscar empleado
-    public Empleado buscarEmpleado(String nombre) {
-        if (nombre == null) return null;
-        return empleadosPorNombre.get(nombre.toLowerCase());
+    // Sobrecarga 2
+    public void agregarPropiedad(Propiedad p) {
+        mapaPropiedades.put(p.getDireccion(), p);
     }
 
-    // Eliminar empleado
-    public boolean eliminarEmpleado(String nombre) {
-        if (nombre == null) return false;
-        String key = nombre.toLowerCase();
-        Empleado e = empleadosPorNombre.remove(key);
-        if (e != null) {
-            empleados.remove(e);
-            return true;
-        }
-        return false;
-    }
-
-    // Agregar propiedad
-    public void agregarPropiedad(Propiedad propiedad) {
-        String key = propiedad.getDireccion().toLowerCase();
-        if (propiedadesPorDireccion.containsKey(key)) {
-            throw new IllegalArgumentException("Ya existe una propiedad en: " + propiedad.getDireccion());
-        }
-        propiedades.add(propiedad);
-        propiedadesPorDireccion.put(key, propiedad);
-    }
-
-    // Buscar propiedad
     public Propiedad buscarPropiedad(String direccion) throws PropiedadNoEncontradaException {
-        if (direccion == null) throw new PropiedadNoEncontradaException("Direccion invalida");
-
-        Propiedad p = propiedadesPorDireccion.get(direccion.toLowerCase());
-
-        if (p == null)
-            throw new PropiedadNoEncontradaException("No se encontro propiedad en: " + direccion);
-
-        return p;
+        if (!mapaPropiedades.containsKey(direccion))
+            throw new PropiedadNoEncontradaException("Propiedad no encontrada");
+        return mapaPropiedades.get(direccion);
     }
 
-    // Actualizar propiedad
     public boolean actualizarPropiedad(String direccion, double nuevoPrecio) {
-        Propiedad p = propiedadesPorDireccion.get(direccion.toLowerCase());
-
+        Propiedad p = mapaPropiedades.get(direccion);
         if (p == null) return false;
-
-        propiedades.remove(p);
-
-        Propiedad nueva;
-
-        if (p instanceof Casa c)
-            nueva = new Casa(c.getDireccion(), nuevoPrecio, c.getPisos());
-        else
-            nueva = new Apartamento(p.getDireccion(), nuevoPrecio, ((Apartamento) p).getPiso());
-
-        propiedades.add(nueva);
-        propiedadesPorDireccion.put(direccion.toLowerCase(), nueva);
+        if (nuevoPrecio <= 0) return false;
+        p.setPrecio(nuevoPrecio);
         return true;
     }
 
-    // Eliminar propiedad
     public boolean eliminarPropiedad(String direccion) {
-        Propiedad p = propiedadesPorDireccion.remove(direccion.toLowerCase());
-        if (p != null) {
-            propiedades.remove(p);
-            return true;
-        }
-        return false;
+        return mapaPropiedades.remove(direccion) != null;
     }
 
-    // Listar
     public List<Propiedad> listarPropiedades() {
-        return new ArrayList<>(propiedades);
+        return new ArrayList<>(mapaPropiedades.values());
     }
 
-    // Filtros
     public List<Propiedad> filtrarPorPrecio(double min, double max) {
-        List<Propiedad> r = new ArrayList<>();
-        for (Propiedad p : propiedades) {
-            if (p.getPrecio() >= min && p.getPrecio() <= max) r.add(p);
+        List<Propiedad> lista = new ArrayList<>();
+        for (Propiedad p : mapaPropiedades.values()) {
+            if (p.getPrecio() >= min && p.getPrecio() <= max)
+                lista.add(p);
         }
-        return r;
+        return lista;
+    }
+
+    public int cantidadPropiedades() {
+        return mapaPropiedades.size();
     }
 
     public double calcularTotalPrecios() {
         double total = 0;
-        for (Propiedad p : propiedades) total += p.getPrecio();
+        for (Propiedad p : mapaPropiedades.values()) {
+            total += p.getPrecio();
+        }
         return total;
     }
 
     public double calcularPromedioPrecios() {
-        return propiedades.isEmpty() ? 0 : calcularTotalPrecios() / propiedades.size();
+        if (mapaPropiedades.isEmpty()) return 0;
+        return calcularTotalPrecios() / mapaPropiedades.size();
     }
 
     public Propiedad obtenerPropiedadMasCara() {
-        if (propiedades.isEmpty()) return null;
-        Propiedad max = propiedades.get(0);
-        for (Propiedad p : propiedades)
-            if (p.getPrecio() > max.getPrecio()) max = p;
-        return max;
+        Propiedad masCara = null;
+        for (Propiedad p : mapaPropiedades.values()) {
+            if (masCara == null || p.getPrecio() > masCara.getPrecio())
+                masCara = p;
+        }
+        return masCara;
     }
 
     public Map<String, Integer> contarPorTipo() {
-        Map<String, Integer> m = new HashMap<>();
-        for (Propiedad p : propiedades) {
-            String tipo = (p instanceof Casa) ? "Casa" : "Apartamento";
-            m.put(tipo, m.getOrDefault(tipo, 0) + 1);
+        Map<String, Integer> mapa = new HashMap<>();
+        for (Propiedad p : mapaPropiedades.values()) {
+            String tipo = p.getClass().getSimpleName();
+            mapa.put(tipo, mapa.getOrDefault(tipo, 0) + 1);
         }
-        return m;
+        return mapa;
     }
 
     public String generarReporteResumen() {
-        return "Reporte:\nTotal propiedades: " + propiedades.size() +
-                "\nTotal precios: " + calcularTotalPrecios() +
-                "\nPromedio: " + calcularPromedioPrecios() +
-                "\nConteo por tipo: " + contarPorTipo();
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== REPORTE INMOBILIARIA ===\n");
+        sb.append("Total propiedades: ").append(cantidadPropiedades()).append("\n");
+        sb.append("Total precios: ").append(calcularTotalPrecios()).append("\n");
+        sb.append("Promedio precios: ").append(calcularPromedioPrecios()).append("\n");
+        sb.append("Conteo por tipo: ").append(contarPorTipo()).append("\n");
+        return sb.toString();
     }
 
-    public int cantidadPropiedades() { return propiedades.size(); }
+    // Empleados
+    public void agregarEmpleado(Empleado e) throws EmpleadoDuplicadoException {
+        for (Empleado emp : empleados) {
+            if (emp.getNombre().equalsIgnoreCase(e.getNombre()))
+                throw new EmpleadoDuplicadoException("Empleado ya existe");
+        }
+        empleados.add(e);
+    }
+
+    public List<Empleado> listarEmpleados() {
+        return empleados;
+    }
 }
