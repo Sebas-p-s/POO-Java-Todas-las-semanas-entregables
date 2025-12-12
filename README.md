@@ -7,6 +7,10 @@
 - 📂 <a href="https://github.com/Sebas-p-s/POO-Java-Todas-las-semanas-entregables/tree/main/src/co/edu/sena/Semanas/Semana05">**Semana 05**</a>
 - 📂 <a href="https://github.com/Sebas-p-s/POO-Java-Todas-las-semanas-entregables/tree/main/src/co/edu/sena/Semanas/Semana06">**Semana 06**</a>
 - 📂 <a href="https://github.com/Sebas-p-s/POO-Java-Todas-las-semanas-entregables/tree/main/src/co/edu/sena/Semanas/Semana07">**Semana 07**</a>
+- 📂 <a href="https://github.com/Sebas-p-s/POO-Java-Todas-las-semanas-entregables/tree/main/src/co/edu/sena/Semanas/Semana08">**Semana 08**</a>
+- 📂 <a href="https://github.com/Sebas-p-s/POO-Java-Todas-las-semanas-entregables/tree/main/src/co/edu/sena/Semanas/Semana09">**Semana 09**</a>
+
+
 
 <img src="https://cdn-icons-png.flaticon.com/512/226/226777.png" alt="Imagen de Java" title="Java" width="200" align="right">
 
